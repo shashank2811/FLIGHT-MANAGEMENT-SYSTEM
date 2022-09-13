@@ -16,11 +16,11 @@ void sett()
         }
     }
 }
-char from1[80]="Bengaluru",to1[90]="Chennai";
-char from2[80]="Hyderabad",to2[90]="Mumbai";
-char from3[80]="New Delhi",to3[90]="New York";
-char from4[80]="California",to4[90]="Singapore";
-char fro[80],tt[80];
+char from1[80]="Bengaluru",to1[90]="Chennai",dept1[20]="03/08/22 14:00 hrs";
+char from2[80]="Hyderabad",to2[90]="Mumbai",dept2[20]="03/08/22 14:00 hrs";
+char from3[80]="New Delhi",to3[90]="New York",dept3[20]="03/08/22 14:00 hrs";
+char from4[80]="California",to4[90]="Singapore",dept4[20]="03/08/22 14:00 hrs";
+char fro[80],tt[80],dept[20];
 struct customer
 {
     int pers;
@@ -89,7 +89,7 @@ int lo_details()
     len=strlen(user);
     if(user[len-4]=='.' && user[len-3]=='c' && user[len-2]=='o' && user[len-1]=='m') //if username is in .com format 
     { //then oly it accepts
-        printf("\nEnter password:\n");
+        printf("\nEnter key:\n");
         scanf("%s",pass);
         printf("\nLogin Successfull*\n\n");
         return 1;
@@ -174,25 +174,29 @@ int airfind()
 {
     int a;
     printf("available flights\n");
-    printf("1. %s -----> %s\n",from1,to1);
-    printf("2. %s -----> %s\n",from2,to2);
-    printf("3. %s -----> %s\n",from3,to3);
-    printf("4. %s -----> %s\n",from4,to4);
+    printf("1. %s -----> %s on %s\n",from1,to1,dept1);
+    printf("2. %s -----> %s on %s\n",from2,to2,dept2);
+    printf("3. %s -----> %s on %s\n",from3,to3,dept3);
+    printf("4. %s -----> %s on %s\n",from4,to4,dept4);
     printf("enter the flight needed\n");
     scanf("%d",&a);
     switch(a)
     {
         case 1:strcpy(fro,from1);
                 strcpy(tt,to1);
+                strcpy(dept,dept1);
                 break;
         case 2:strcpy(fro,from2);
                 strcpy(tt,to2);
+                strcpy(dept,dept2);
                 break;
         case 3:strcpy(fro,from3);
                 strcpy(tt,to3);
+                strcpy(dept,dept3);
                 break;
         case 4:strcpy(fro,from4);
                 strcpy(tt,to4);
+                strcpy(dept,dept4);
                 break;
         default:a=airfind();
                 a=a+1;
@@ -214,7 +218,6 @@ void reserve()
     int k=airfind();
     node temp;
     int ch,a,b,d,z;
-    char depart[20];
     char accomp[20];
     printf("Enter no of \n\tAdults(Above 12 years)\n\tChildren(Between 2-12years)\n\tInfants(Below 2 years) \n");
     scanf("%d%d%d",&a,&b,&d);
@@ -225,8 +228,6 @@ void reserve()
         printf("seats for those many passangers are not available\n");
         return;
     }
-    printf("Enter departure date:\n");
-    scanf("%s",depart);
     printf("------Enter customer details:------- \n");
     printf("Select the preferred class\n");
     printf("1.Business class \t\t 2.Economy class\n");
@@ -249,7 +250,7 @@ void reserve()
                             temp->pers=1;
                             strcpy(temp->from,fro);
                             strcpy(temp->to,tt);
-                            strcpy(temp->dept,depart);
+                            strcpy(temp->dept,dept);
                             printf("Enter first name\n");
                             scanf("%s",temp->fname);
                             printf("Enter last name\n");
@@ -277,7 +278,7 @@ void reserve()
                             temp->pers=2;
                             strcpy(temp->from,fro);
                             strcpy(temp->to,tt);
-                            strcpy(temp->dept,depart);
+                            strcpy(temp->dept,dept);
                             strcpy(temp->acc,accomp);
                             printf("Enter first name\n");
                             scanf("%s",temp->fname);
@@ -303,7 +304,7 @@ void reserve()
                             temp->pers=3;
                             strcpy(temp->from,fro);
                             strcpy(temp->to,tt);
-                            strcpy(temp->dept,depart);
+                            strcpy(temp->dept,dept);
                             strcpy(temp->acc,accomp);
                             printf("Enter first name\n");
                             scanf("%s",temp->fname);
@@ -492,6 +493,10 @@ void display_air(Node f)
     {
         printf("\nEnter your AWB number\n");
         scanf("%d",&awb);
+        if(temp==NULL){
+            printf("\nWe dont have any other bookings with that awb number\n");
+            return;
+        }
         while(temp!=NULL)
         {
             if(awb==temp->awbno)
@@ -509,12 +514,7 @@ void display_air(Node f)
                 printf("\n----->%s",temp->tadd);
                 printf("\nQuantity--->%d",(temp->quant));
                 printf("\nWeight---->%d",(temp->weight));
-                printf("\nIf above details correct , please confirm with 'yes'\n");
-                scanf("%s",h);
-                if(strcmp(h,"yes")==0)
-                {
-                    calculate_air(temp);
-                }
+                calculate_air(temp);
                 else
                 {
                     printf("\nWe dont have any other bookings with that awb number\n");
@@ -548,10 +548,11 @@ void cus_supp()
     int cs;
     printf("\nSelect your type of service\n1. Passenger booking\n2. Air frieght\n3.Exit\n");
     scanf("%d",&af);
+    int flag=0;
     switch(af)
     {
         case 1:printf("\nPASSENGER BOOKING SERVICES\n");
-               while(1)
+               while(flag==0)
                {
                     printf("\nFAQS\n 1.Can I cancel the ticket within 24 hours of booking \n2. What is medical clearance and when do I need one? \n 3. Assistance when my flight has been delayed or cancelled\n 4. Can we make reservations and purchase tickets as far in advance as possible\n");
                     scanf("%d",&cs);
@@ -566,14 +567,13 @@ void cus_supp()
                         case 4:printf("\nYou can reserve and book tickets before 1 month of your travel\n");  
                                break;
                         default:printf("\nFor any other queries and support please write to us at \n wecare@bestairlines.com\n Contacts us on \t +919742744458");
+                                flag=1;
                                 break;     
                     }
                }
-               exit(0);
-
         case 2: printf("\nAIR FRIEGHT SERVICES\n");
                 int afs;
-                while(1)
+                while(flag==0)
                 {
                    printf("\nFAQS\n1.What are the customs requirement for dispatch of international shipments?\n 2.What are the articles that are banned on your services?\n3. How can I find the delivery status of the consignment\n4.Are there any holidays that may affect service schedules?\n" );
                    scanf("%d",&afs);
@@ -591,11 +591,13 @@ void cus_supp()
                         case 4:printf("\nNational Holidays might affect the services\n");
                                break;
                         default: printf("\nFor any other queries and support please write to us at \n wecare@bestairlines.com\n Contacts us on \t+919742744458");
+                                flag=1;
                                 break;
                     }
                 }   
-                exit(0);
+        case 3:return;
     }
+    return;
 }
 int main()
 {
