@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include<time.h>
+#include <time.h>
 #include <ctype.h>
 int count=0;//indicates the number of bookings
 int seat[5][3][4];//rows columns and flights
@@ -89,9 +89,9 @@ int lo_details()
     len=strlen(user);
     if(user[len-4]=='.' && user[len-3]=='c' && user[len-2]=='o' && user[len-1]=='m') //if username is in .com format 
     { //then oly it accepts
-        printf("\nEnter key:\n");
+        printf("\nEnter Password:\n");
         scanf("%s",pass);
-        printf("\nLogin Successfull*\n\n");
+        printf("\nLogin Successfull\n\n");
         return 1;
     }
     else
@@ -493,7 +493,8 @@ void display_air(Node f)
     {
         printf("\nEnter your AWB number\n");
         scanf("%d",&awb);
-        if(temp==NULL){
+        if(temp==NULL)
+        {
             printf("\nWe dont have any other bookings with that awb number\n");
             return;
         }
@@ -515,29 +516,25 @@ void display_air(Node f)
                 printf("\nQuantity--->%d",(temp->quant));
                 printf("\nWeight---->%d",(temp->weight));
                 calculate_air(temp);
-                else
-                {
-                    printf("\nWe dont have any other bookings with that awb number\n");
-                    return;
-                }
-                ch=0;
-                break;
             }
             else
             {
-                temp=temp->link;
-                ch=1;
+                    printf("\nWe dont have any other bookings with that awb number\n");
+                    return;
             }
-        }  
-        if(ch==1)
-        {
-            printf("\nWrong AWB number\n");
-            printf("\nEnter the correct AWB number and TRY AGAIN!\n");
-        }
-        else
-        {
+            ch=0;
             break;
         }
+        if(temp==NULL)
+        {
+            temp=temp->link;
+            ch=1;
+        }
+    }  
+    if(ch==1)
+    {
+            printf("\nWrong AWB number\n");
+            printf("\nEnter the correct AWB number and TRY AGAIN!\n");
     }
 }
 
