@@ -6,7 +6,7 @@
 int count=0;//indicates the number of bookings
 int seat[5][3][4];//rows columns and flights
 void sett()
-{
+{// to intialise all the seats to 0
     for(int i=0;i<5;i++)
     {
         for(int j=0;j<3;j++)
@@ -96,8 +96,8 @@ int lo_details()
     }
     else
     {
-    printf("\nInvalid username\n\n");
-    return 0;
+        printf("\nInvalid username\n\n");
+        return 0;
     }
 
 }
@@ -105,9 +105,9 @@ int allot(int k,node temp)
 {
     int a;
     printf("Available seats in the flight\n");
-    for(int i=0;i<5;i++)
+    for(int i=0;i<5;i++)//rows
     {
-        for(int j=0;j<3;j++)
+        for(int j=0;j<3;j++)//columns
         {
             if(seat[i][j][k]==0)
                 printf("%c%d,",i+65,j);//type casting
@@ -116,7 +116,7 @@ int allot(int k,node temp)
     printf("\b \b");
     printf("\n");
     int l=0;
-    printf("Enter seat needed\n1.window\n2.aisle\n3.middle\n");
+    printf("Enter seat needed\n0.window\n1.aisle\n2.middle\n");
     scanf("%d",&a);
     a=a-1;
     printf("Seat Marker:\n");
@@ -148,7 +148,7 @@ int allot(int k,node temp)
         if(seat[p][r][k]==0)
         {
             seat[p][r][k]=1;
-            printf("seat conirmed\n");
+            printf("seat confirmed\n");
             temp->seatnum=z;
             temp->dig=r;
             return a;
@@ -173,7 +173,7 @@ int checkseat(int n,int k)
 int airfind()
 {
     int a;
-    printf("available flights\n");
+    printf("Available flights\n");
     printf("1. %s -----> %s on %s\n",from1,to1,dept1);
     printf("2. %s -----> %s on %s\n",from2,to2,dept2);
     printf("3. %s -----> %s on %s\n",from3,to3,dept3);
@@ -217,7 +217,7 @@ void reserve()
 {
     int k=airfind();
     node temp;
-    int ch,a,b,d,z;
+    int ch,a,b,d,z,kr;
     char accomp[20];
     printf("Enter no of \n\tAdults(Above 12 years)\n\tChildren(Between 2-12years)\n\tInfants(Below 2 years) \n");
     scanf("%d%d%d",&a,&b,&d);
@@ -229,178 +229,189 @@ void reserve()
         return;
     }
     printf("------Enter customer details:------- \n");
-    printf("Select the preferred class\n");
-    printf("1.Business class \t\t 2.Economy class\n");
-    scanf("%d",&z);
-    while(1)
-    {
-        if(a==0 && b==0 && d==0) //termination condt
+    
+    kr: printf("Select the preferred class\n");
+        printf("1.Business class \t\t 2.Economy class\n");
+        scanf("%d",&z);
+        if(z>2)
         {
-            break;
+            printf("Enter the correct class\n");
+            goto kr;
         }
-        printf("Enter details:\n 1.Select Adult\t\t2. Select Children\t\t3. Select Infants\n");
-        scanf("%d",&ch);
-        switch(ch)
+        while(1)
         {
-            case 1:if(a!=0)
-                    {
-                        for(int i=0;i<a;i++)
-                        {
-                            temp=getnode();
-                            temp->pers=1;
-                            strcpy(temp->from,fro);
-                            strcpy(temp->to,tt);
-                            strcpy(temp->dept,dept);
-                            printf("Enter first name\n");
-                            scanf("%s",temp->fname);
-                            printf("Enter last name\n");
-                            scanf("%s",temp->lname);
-                            printf("Enter phone Number\n");
-                            scanf("%d",&(temp->phno));
-                            if(z==1)
-                                strcpy(temp->seats,"Business");
-                            else
-                                strcpy(temp->seats,"Economy");
-                            temp->type=allot(k,temp);
-                            strcpy(accomp,temp->fname);
-                            printf("Gender?[M/F]\n");
-                            scanf("%s",temp->gen);
-                            insertfun(temp);
-                        }
-                        a=0;
-                    }    
-                    break;
-            case 2:if(b!=0)
-                    {
-                        for(int i=0;i<b;i++)
-                        {
-                            temp=getnode();
-                            temp->pers=2;
-                            strcpy(temp->from,fro);
-                            strcpy(temp->to,tt);
-                            strcpy(temp->dept,dept);
-                            strcpy(temp->acc,accomp);
-                            printf("Enter first name\n");
-                            scanf("%s",temp->fname);
-                            printf("Enter last name\n");
-                            scanf("%s",temp->lname);
-                            if(z==1)
-                                strcpy(temp->seats,"Business");
-                            else
-                                strcpy(temp->seats,"Economy");
-                            temp->type=allot(k,temp);
-                            printf("Gender?[1 for M|2 for F]\n");
-                            scanf("%s",temp->gen);
-                            insertfun(temp);
-                        }
-                        b=0;
-                    }
-                    break;
-            case 3:if(d!=0)
-                    {
-                        for(int i=0;i<d;i++)
-                        {
-                            temp=getnode();
-                            temp->pers=3;
-                            strcpy(temp->from,fro);
-                            strcpy(temp->to,tt);
-                            strcpy(temp->dept,dept);
-                            strcpy(temp->acc,accomp);
-                            printf("Enter first name\n");
-                            scanf("%s",temp->fname);
-                            printf("Enter last name\n");
-                            scanf("%s",temp->lname);
-                            if(z==1)
-                                strcpy(temp->seats,"Business");
-                            else
-                                strcpy(temp->seats,"Economy");
-                            temp->type=allot(k,temp);
-                            printf("Gender?[1 for M|2 for F]\n");
-                            scanf("%s",temp->gen);
-                            insertfun(temp);
-                        }
-                        d=0;
-                    }    
-                    break;
+            if(a==0 && b==0 && d==0) //termination condt
+            {
+                break;
+            }
+            de: printf("Enter details:\n 1.Select Adult\t\t2. Select Children\t\t3. Select Infants\n");
+                scanf("%d",&ch);
+                if(ch>3)
+                {
+                    printf("Select the correct option\n");
+                    goto de;
+                }
+                switch(ch)
+                {
+                    case 1:if(a!=0)
+                            {
+                                for(int i=0;i<a;i++)
+                                {
+                                    temp=getnode();
+                                    temp->pers=1;
+                                    strcpy(temp->from,fro);
+                                    strcpy(temp->to,tt);
+                                    strcpy(temp->dept,dept);
+                                    printf("Enter first name\n");
+                                    scanf("%s",temp->fname);
+                                    printf("Enter last name\n");
+                                    scanf("%s",temp->lname);
+                                    printf("Enter phone Number\n");
+                                    scanf("%d",&(temp->phno));
+                                    if(z==1)
+                                        strcpy(temp->seats,"Business");
+                                    else 
+                                        strcpy(temp->seats,"Economy");
+                                    temp->type=allot(k,temp);
+                                    strcpy(accomp,temp->fname);
+                                    printf("Gender?[1 for M|2 for F]\n");
+                                    scanf("%s",temp->gen);
+                                    insertfun(temp);
+                                }
+                                a=0;
+                            }    
+                            break;
+                    case 2:if(b!=0)
+                            {
+                                for(int i=0;i<b;i++)
+                                {
+                                    temp=getnode();
+                                    temp->pers=2;
+                                    strcpy(temp->from,fro);
+                                    strcpy(temp->to,tt);
+                                    strcpy(temp->dept,dept);
+                                    strcpy(temp->acc,accomp);
+                                    printf("Enter first name\n");
+                                    scanf("%s",temp->fname);
+                                    printf("Enter last name\n");
+                                    scanf("%s",temp->lname);
+                                    if(z==1)
+                                        strcpy(temp->seats,"Business");
+                                    else 
+                                        strcpy(temp->seats,"Economy");
+                                    temp->type=allot(k,temp);
+                                    printf("Gender?[1 for M|2 for F]\n");
+                                    scanf("%s",temp->gen);
+                                    insertfun(temp);
+                                }
+                                b=0;
+                            }
+                            break;
+                    case 3:if(d!=0)
+                            {
+                                for(int i=0;i<d;i++)
+                                {
+                                    temp=getnode();
+                                    temp->pers=3;
+                                    strcpy(temp->from,fro);
+                                    strcpy(temp->to,tt);
+                                    strcpy(temp->dept,dept);
+                                    strcpy(temp->acc,accomp);
+                                    printf("Enter first name\n");
+                                    scanf("%s",temp->fname);
+                                    printf("Enter last name\n");
+                                    scanf("%s",temp->lname);
+                                    if(z==1)
+                                        strcpy(temp->seats,"Business");
+                                    else 
+                                        strcpy(temp->seats,"Economy");
+                                    temp->type=allot(k,temp);
+                                    printf("Gender?[1 for M|2 for F]\n");
+                                    scanf("%s",temp->gen);
+                                    insertfun(temp);
+                                }
+                                d=0;
+                            }    
+                            break;
+            }
         }
-    }
-    printf("Seat Booked Successfully\n");
+        printf("Seat Booked Successfully\n");
 } 
 void display()
 {
-    int ch;
+    int ch,ef;
     node cur=c;
     int count=1;
     while(1)
     {
         cur=c;
-        printf("1. Select Adult\n2. Select Children\n3. Select Infants\n4.Exit\n");
-        scanf("%d",&ch);
-        if(ch>3)
-        {
-            break;
-        }
-        while(cur!=NULL)
-        {
-            if(ch==1 && cur->pers==1)
+        ef: printf("1. Select Adult\n2. Select Children\n3. Select Infants\n4.Exit\n");
+            scanf("%d",&ch);
+            if(ch>3)
             {
-                printf("Adult\n");
-                printf("\n----------------------------------\n");
-                printf("First name: %s\n",cur->fname);
-                printf("Last name: %s\n",cur->lname);
-                printf("Gender?[M|F]:%s\n",cur->gen);
-                printf("Frm:%s\nTo:%s\nphno:%d\nDeparture date:%s\n",cur->from,cur->to,cur->phno,cur->dept);
-                printf("Seat Class:%s\n",cur->seats);
-                if(cur->type==0)
-                    printf("Seat type:Window seat\n");
-                if(cur->type==1)
-                    printf("Seat type:Aisle seat\n");
-                if(cur->type==2)
-                    printf("Seat type:Middle seat\n");
-                printf("Seat Number:%c%d",cur->seatnum,cur->dig);    
-                printf("\n----------------------------------\n");    
+                printf("Select the correct class\n");
+                goto ef;
             }
-                        
-            if(ch==2 && cur->pers==2)
+            while(cur!=NULL)
             {
-                printf("Child\n");
-                printf("\n----------------------------------\n");
-                printf("First name: %s\n",cur->fname);
-                printf("Last name: %s\n",cur->lname);
-                printf("Gender:%s\n",cur->gen);
-                printf("Frm:%s\nTo:%s\nDeparture date:%s\n",cur->from,cur->to,cur->dept);
-                printf("Accompanied by:%s\n",cur->acc);
-                printf("Seat Class:%s\n",cur->seats);
-                if(cur->type==0)
-                    printf("Seat type:Window seat\n");
-                if(cur->type==1)
-                    printf("Seat type:Aisle seat\n");
-                if(cur->type==2)
-                    printf("Seat type:Middle seat\n"); 
-                printf("Seat Number:%c%d",cur->seatnum,cur->dig);    
-                printf("\n----------------------------------\n");    
+                if(ch==1 && cur->pers==1)
+                {
+                    printf("Adult\n");
+                    printf("\n----------------------------------\n");
+                    printf("First name: %s\n",cur->fname);
+                    printf("Last name: %s\n",cur->lname);
+                    printf("Gender[1 for M|2 for F]:%s\n",cur->gen);
+                    printf("Frm:%s\nTo:%s\nphno:%d\nDeparture date:%s\n",cur->from,cur->to,cur->phno,cur->dept);
+                    printf("Seat Class:%s\n",cur->seats);
+                    if(cur->type==0)
+                        printf("Seat type:Window seat\n");
+                    if(cur->type==1)
+                        printf("Seat type:Aisle seat\n");
+                    if(cur->type==2)
+                        printf("Seat type:Middle seat\n");
+                    printf("Seat Number:%c%d",cur->seatnum,cur->dig);    
+                    printf("\n----------------------------------\n");    
+                }
+                if(ch==2 && cur->pers==2)
+                {
+                    printf("Child\n");
+                    printf("\n----------------------------------\n");
+                    printf("First name: %s\n",cur->fname);
+                    printf("Last name: %s\n",cur->lname);
+                    printf("Gender[1 for M|2 for F]:%s\n",cur->gen);
+                    printf("Frm:%s\nTo:%s\nDeparture date:%s\n",cur->from,cur->to,cur->dept);
+                    printf("Accompanied by:%s\n",cur->acc);
+                    printf("Seat Class:%s\n",cur->seats);
+                    if(cur->type==0)
+                        printf("Seat type:Window seat\n");
+                    if(cur->type==1)
+                        printf("Seat type:Aisle seat\n");
+                    if(cur->type==2)
+                        printf("Seat type:Middle seat\n"); 
+                    printf("Seat Number:%c%d",cur->seatnum,cur->dig);    
+                    printf("\n----------------------------------\n");    
+                }
+                if(ch==3 && cur->pers==3)
+                {
+                    printf("Infant\n");
+                    printf("\n----------------------------------\n");
+                    printf("First name: %s\n",cur->fname);
+                    printf("Last name: %s\n",cur->lname);
+                    printf("Gender[1 for M|2 for F]:%s\n",cur->gen);
+                    printf("Frm:%s\nTo:%s\nDeparture date:%s\n",cur->from,cur->to,cur->dept);
+                    printf("Accompanied by:%s\n",cur->acc);
+                    printf("Seat Class:%s\n",cur->seats);
+                    if(cur->type==0)
+                        printf("Seat type:Window seat\n");
+                    if(cur->type==1)
+                        printf("Seat type:Aisle seat\n");
+                    if(cur->type==2)
+                        printf("Seat type:Middle seat\n"); 
+                   printf("Seat Number:%c%d",cur->seatnum,cur->dig);     
+                    printf("\n----------------------------------\n");    
+                }
+            cur=cur->link;
             }
-            if(ch==3 && cur->pers==3)
-            {
-                printf("Infant\n");
-                printf("\n----------------------------------\n");
-                printf("First name: %s\n",cur->fname);
-                printf("Last name: %s\n",cur->lname);
-                printf("Gender?[M|F]:%s\n",cur->gen);
-                printf("Frm:%s\nTo:%s\nDeparture date:%s\n",cur->from,cur->to,cur->dept);
-                printf("Accompanied by:%s\n",cur->acc);
-                printf("Seat Class:%s\n",cur->seats);
-                if(cur->type==0)
-                    printf("Seat type:Window seat\n");
-                if(cur->type==1)
-                    printf("Seat type:Aisle seat\n");
-                if(cur->type==2)
-                    printf("Seat type:Middle seat\n"); 
-               printf("Seat Number:%c%d",cur->seatnum,cur->dig);     
-                printf("\n----------------------------------\n");    
-            }
-        cur=cur->link;
-        }
     }
 }
 void calculate_air(Node temp) //used to calculate the cost of the package being transported
@@ -426,7 +437,7 @@ Node air_f(Node f)
     Node temp=getnode1();
     int g;
     printf("\n-------$$$-----The easiest way to book air cargo-----$$$--------\n");
-    printf("\nEnter name\n");
+    printf("\nEnter name of the customer\n");
     scanf("%s",temp->name);
     printf("\nEnter the origin airport\n");
     scanf("%s",temp->origin);
@@ -466,7 +477,8 @@ Node air_f(Node f)
                 char str6[100] ="INTERNATIONAL/DOMESTIC POST OFFICE MAIL";
                 puts(str6);
                 break;
-        default: exit(0);
+        default:printf("Enter the correct choice\n");
+                break;
 
     }
     printf("\nEnter the quantity\n");
@@ -546,6 +558,11 @@ void cus_supp()
     printf("\nSelect your type of service\n1. Passenger booking\n2. Air frieght\n3.Exit\n");
     scanf("%d",&af);
     int flag=0;
+    if(af>3)
+    {
+        printf("Enter the correct choice\n");
+        exit(0);
+    }
     switch(af)
     {
         case 1:printf("\nPASSENGER BOOKING SERVICES\n");
@@ -633,7 +650,7 @@ int main()
 		scanf("%d",&ch);
 		switch(ch)
 		{
-		    case 1:reserve();
+		    case 1: reserve();
 		            break;
 		    case 2: display(c);
 		            break;
@@ -648,3 +665,4 @@ int main()
 		}
     }
 }
+
